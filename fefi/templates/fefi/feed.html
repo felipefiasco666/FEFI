@@ -1,0 +1,53 @@
+{% extends 'fefi/base.html' %}
+{% block content %}
+{% load static %}
+{% load thumbnail %}
+{% for fef in fefs %}
+<div class="pop">
+    <p>
+     <a class="username-tag" href="{% url 'fefi:profiles' %}">@{{fef.profile}}</a>
+{{fef.date_created|date:'M d,Y H:i'}}
+{{fef.text|linebreaks}}
+<img src="{% thumbnail fef.im 500x500 %}">
+{% if fef.video %}
+<video width="640" height="480" controls>
+    <source src="{{fef.video.url}}" >
+</video>
+{% else %}
+
+{% endif %}
+{% if fef.audio %}
+<audio controls>
+    <source src="{{fef.audio.url}}" type="audio/mp3">
+</audio>
+{% else %}
+{% endif %}
+
+<form action="{% url 'fefi:delete_fef' fef.id %}" method="post">
+    {% csrf_token %}
+    <button type="submit">delete fef</button>
+
+</form>
+
+{{fef.number_of_likes}}
+like{{fef.number_of_likes|pluralize}} 
+{% if user not in fef.likes.all %}
+<a href="{% url 'fefi:fef_like2' fef.id %}">
+    <img class="fefi-logo" src="{% static 'images/likeoutline-svgrepo-com.svg' %}">
+</a>
+{% else %}
+<a class="unlike" href="{% url 'fefi:fef_like2' fef.id %}">unlike</a>
+{% endif %}
+<a href="{% url 'fefi:reply' fef.id %}">
+    <img class="fefi-logo" src="{% static 'images/reply-svgrepo-com.svg' %}">
+</a>
+<div class="reply-count">
+    {{fef.replies.count}}
+reply{{fef.replies.count|pluralize}}
+
+</div>
+
+</p>
+</div>
+{% endfor %}
+{% endblock %}

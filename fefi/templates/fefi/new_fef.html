@@ -1,0 +1,10 @@
+{% extends 'fefi/base.html' %}
+{% block content %}
+<p> <a href="{% url 'fefi:profile' profile.id %}"> Add a fef  {{profile}}</a> </p>
+<P>Fef!</P>
+<form action="{% url 'fefi:new_fef' profile.id %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button name="submit">Add fef</button>
+</form>
+{% endblock content %}

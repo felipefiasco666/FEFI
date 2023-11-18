@@ -1,0 +1,11 @@
+{% extends 'fefi/base.html' %}
+{% block content %}
+<h1>Edit your username</h1>
+<p>Edit your username below:</p>
+<form method="post" action="{% url 'fefi:edit2'  %}" >
+    {% csrf_token %}
+    {{ user_form.as_p }}
+    <button type="submit">save changes</button>
+
+</form>
+{% endblock %}

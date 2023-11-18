@@ -1,0 +1,13 @@
+{% extends 'fefi/base.html' %}
+{% block content %}
+<h1>Update your profile picture</h1>
+<p>Edit your profile picture:</p>
+<form method="post" action="{% url 'fefi:edit'  %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ profile_form.as_p }}
+    <button type="submit">save changes</button>
+
+</form>
+<p>Do you want to change your username? i mean it looks fine but you could <a href="{% url 'fefi:edit2' %}">change it here</a></p>
+
+{% endblock %}

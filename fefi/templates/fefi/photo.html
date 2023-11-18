@@ -1,0 +1,6 @@
+{% extends 'fefi/base.html' %}
+{% block content %}
+{% for photo in profile.photo %}
+<img src="{{profile.photo.url}}" width="240" height="200">
+{% endfor %}
+{% endblock content %}

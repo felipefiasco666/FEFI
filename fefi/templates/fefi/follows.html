@@ -1,0 +1,57 @@
+{% extends 'fefi/base.html' %}
+{% block content %}
+{% load thumbnail %}
+{% load static %}
+
+<p>profiles</p>
+<P>
+    <a class="fefi-search" href="{% url 'fefi:search' %}">Search profile
+        <img class="fefi-logo" src="{% static 'images/feeds.png' %}">
+    </a>
+</P>
+    <ul class="card">
+        {% for profile in profiles.follows.all %}
+        <li class="list_card"> 
+            <a class="username-tag" href="{% url 'fefi:profile' profile.id %}">@{{profile|lower}}</a>
+        {% if profile.photo %}
+        <img class="prof" src="{% thumbnail profile.photo 300x300 %}" width="100" height="100">
+        {% else %}
+        <img class="prof" src="{% static 'images/Black and White, The Word of the Essence, Philosophy, Typographic and Minimal Phone Wallpaper.jpg' %}">
+        {% endif %}
+        <p>
+            {% if profile in user.profile.follows.all %}
+            <p>
+                you follow {{profile}}
+            </p>
+            {% else %}
+            <p>
+                you don't follow {{profile}}
+            </p>
+            {% endif %}   
+            </p>
+    
+    {% if profile in profiles.follows.all %}
+    <a class="red" href="{% url 'fefi:unfollow' profile.user.id %}">unfollow</a>
+    {% else %}
+    <a class="green" href="{% url 'fefi:follow' profile.user.id %}">follow</a>
+
+    {% endif %}
+        {% with total_followers=profile.follows.count %}
+        follows {{total_followers}}|<br/>
+    {% endwith %}
+    {% with total_followed=profile.followed_by.count %}
+    followed by {{total_followed}}
+    {% endwith %}
+    {% endfor %}
+
+  
+        </li>
+    </ul>
+    <br/> <br/> <br/>
+    
+
+
+</div>
+
+
+{% endblock content %}

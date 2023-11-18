@@ -1,0 +1,11 @@
+{% extends "fefi/base.html" %}
+{% block content %}
+<div class="register">
+<form method="post" action="{% url 'users:register' %}">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">register</button>
+    <p> <input type="hidden" name="next" value="{% url 'fefi:index' %}"> </p>
+</form>
+</div>
+{% endblock content %}

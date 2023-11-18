@@ -1,0 +1,64 @@
+{% extends 'fefi/base.html' %}
+{% block content %}
+{% load thumbnail %}
+{% load static %}
+<a class="username-tag" href="{% url 'fefi:profile' fef.profile.id %}">@{{fef.profile}}</a>
+<p>{{fef.date_created|date:'M d,Y H:i'}}</p>
+    <p>{{fef.text|linebreaks}}
+    </p>
+    <img src="{% thumbnail fef.im 500x500 %}">
+    {% if fef.video %}
+    <video width="640" height="480" controls>
+        <source src="{{fef.video.url}}" type="video/mp4">
+    </video>
+    {% else %}
+    {% endif %}
+    {% if fef.audio %}
+    <audio controls>
+        <source src="{{fef.audio.url}}" type="audio/mp3">
+    </audio>
+    {% else %}
+    {% endif %}
+
+<form method="post" action="{% url 'fefi:reply' fef.id %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form.as_p}}
+    <p> <input type="submit" value="add reply"> </p>
+</form>
+{% for reply in fef.replies.all %}
+<a class="username-tag" href="{% url 'fefi:profile' reply.users.id %}" >@{{reply.users}}</a>
+<br/>
+{{reply.date_created}}
+{{reply.body|linebreaks}}
+<img src="{% thumbnail reply.repimg 500x500 %}">
+{% if reply.repvideo %}
+<video width="640" height="480" controls>
+    <source src="{{reply.repvideo.url}}" type="video/mp4">
+</video>
+{% else %}
+
+{% endif %}
+{% if reply.audio2 %}
+<audio controls>
+    <source src="{{reply.audio2.url}}" type="audio/mp3">
+</audio>
+{% else %}
+
+{% endif %}
+{{reply.numbers_of_likes}}
+    like{{reply.numbers_of_likes|pluralize}} 
+{% if user not in reply.likes.all %}
+    <a href="{% url 'fefi:reply_like' reply.id %}">
+        <img class="fefi-logo" src="{% static 'images/likeoutline-svgrepo-com.svg' %}">
+    </a>
+    {% else %}
+    <a class="unlike" href="{% url 'fefi:reply_like' reply.id %}">unlike</a>
+    {% endif %}
+<form action="{% url 'fefi:reply_delete' reply.id %}" method="post">
+    {% csrf_token %}
+  <button type="submit">delete feply</button>
+
+</form>
+
+{% endfor %}
+{% endblock %}

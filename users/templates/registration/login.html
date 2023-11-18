@@ -1,0 +1,17 @@
+
+{% extends "fefi/base.html" %} {% block title %}Log-
+in{% endblock %} {% block content %} <h1>Log-in</h1> 
+{% if form.errors %} 
+<p> Your username and password didn't match. Please try again. </p> 
+<p>if you don't have an account yet <a href="{% url 'users:register' %}">sign up.</a> </p>
+{% else %} 
+<p>Please, use the following form to log-in:</p>
+ {% endif %} 
+ <div class="login-form"> <form method="post"  action="{% url 'users:login' %}"> 
+    {{form.as_p }} 
+    {% csrf_token %} 
+    <button type="submit">log in</button>
+    <input type="hidden" name="next" value="{% url 'fefi:index' %}">
+    </form>
+ </div>
+{% endblock %}

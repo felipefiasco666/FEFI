@@ -1,0 +1,95 @@
+{% load static %}
+{% load bootstrap4 %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,shrink-to-fit=no">
+    <title>Fefi</title>
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery='full' %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <style type="text/css">
+      .sidenav{
+        height: 100%;
+        width: 160px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: #0f2862;
+        overflow-x: hidden;
+        padding-top: 20px;
+      }
+      .sidenav a{
+        padding: 6px 8px 6px 16px;
+        text-decoration: none;
+        font-size: 20px;
+        color: white;
+        display: block;
+        float: none;
+      }
+      .sidenav a:hover{
+        color: green;
+
+      }
+      .main{
+        margin-left: 10px;
+        padding: 0px 10px;
+      }
+
+    </style>
+</head>
+<body>
+  <div class="fef-link">
+    
+
+  </div>
+  <div class="sidenav">
+        <nav class="sidebar">
+            
+
+            {% if user.is_authenticated %}
+          <ul class="nav-link">
+            
+          <p>
+            <a  href="{% url 'fefi:index'  %}" >
+              <img class="fefi-logo" src="{% static 'images/status2-svgrepo-com.svg' %}"> Home!</a>
+          
+              <a  href="{% url 'fefi:feed'  %}">
+                <img class="fefi-logo" src="{% static 'images/plume-svgrepo-com.svg' %}"> Fefs</a>
+
+              </a>
+              <a  href="{% url 'fefi:profile' request.user.id %}">
+                <img class="fefi-logo" src="{% static 'images/image-picture-svgrepo-com.svg' %}" >{{request.user.username}}'s profile
+            </a>
+       
+         
+              <a  href="{% url 'fefi:profiles' %}">
+                <img class="fefi-logo" src="{% static 'images/message-circle-svgrepo-com.svg' %}" >profiles
+              </a>
+                <a  href="{% url 'users:logout' %}">
+                  <img class="fefi-logo" src="{% static 'images/plume-svgrepo-com.svg' %}" > logout</a>
+              </p>
+             
+              {% else %}
+              <a href="{% url 'users:login' %}">login</a>
+              <br/>
+              <a href="{% url 'users:register' %}">sign up.</a>
+              {% endif %}
+          </p>
+          </ul>
+
+          </header>
+          
+
+        </nav>
+       
+      </div>
+
+  {% block content %}{% endblock %}
+
+
+</body>
+
+</html>

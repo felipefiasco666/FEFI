@@ -1,0 +1,52 @@
+{% extends 'fefi/base.html' %}
+{% block content %}
+{% load thumbnail %}
+{% load static %}
+<h1>Search profiles!</h1>
+<form method="post">
+    {% csrf_token %}
+    <input type="input" class="form-control" placeholder="search profiles..." name="search">
+    <button type="submit">search</button>
+
+</form>
+{% if searched %}
+{% for result in searched %}
+<ul class="card">
+    <li class="list_card">
+        <p>
+            <a class="username-tag" href="{% url 'fefi:profile' result.profile.id %}">@{{result.profile|lower}}</a>
+            {% if result.profile.photo %}
+            <img class="prof" src="{% thumbnail result.profile.photo 300x300 %}" width="100" height="100">
+            {% else %}
+            <img class="prof" src="{% static 'images/Black and White, The Word of the Essence, Philosophy, Typographic and Minimal Phone Wallpaper.jpg' %}">
+            {% endif %}
+            
+
+        </p>
+    </li>
+
+   
+    {% if result.profile in user.profile.follows.all %}
+            <p>
+                you follow {{result.profile}}
+            </p>
+            {% else %}
+            <p>
+                you don't follow {{result.profile}}
+            </p>
+            {% endif %}
+
+    {% with total_followers=result.profile.follows.count %}
+    follows {{total_followers}}| <br/>
+{% endwith %}
+{% with total_followed=result.profile.followed_by.count %}
+followed by {{total_followed}}
+{% endwith %}
+
+</ul>
+
+{% endfor %}
+{% else %}
+Try searching for usernames
+{% endif %}
+{% endblock %}

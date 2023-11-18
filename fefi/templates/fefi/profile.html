@@ -1,0 +1,111 @@
+{% extends 'fefi/base.html' %}
+{% block content %}
+{% load static %}
+{% load thumbnail %}
+{% load bootstrap4 %}
+<div class="main">
+    {% if profile.photo %}
+<img class="prof" src="{% thumbnail profile.photo 300x300 %}" width="100" height="100">
+{% else %}
+<img class="prof" src="{% static 'images/Black and White, The Word of the Essence, Philosophy, Typographic and Minimal Phone Wallpaper.jpg' %}" >
+{% endif %}
+<p>{{profile}}</p>
+<a class="btn-update" href="{% url 'fefi:edit'  %}">update profile 
+    <img class="fefi-logo" src="{% static 'images/myprofile.png' %}">
+</a>
+<br/> <br/>
+ <form method="post">
+    {% csrf_token %}
+    {% if profile in user.profile.follows.all %}
+    <input name="follow" value="unfollow" class="btn-blue" type="submit">
+ 
+    {% else %}
+    <input name="follow" value="follow" class="btn-purple" type="submit">
+    {% endif %}
+</form>
+<a class="btn-follow" href="{% url 'fefi:follows' profile.id %}">
+    {% with total_followers=profile.follows.count %}
+     follows {{total_followers}}
+
+    {% endwith %}    
+</a>
+
+<a class="btn-follower" href="{% url 'fefi:followers' profile.id %}">
+    {% with total_followed=profile.followed_by.count %}
+    followers {{total_followed}}
+    {% endwith %}
+
+</a>
+
+    <p>
+        <a class="btn-box" href="{% url 'fefi:new_fef' profile.id %}">Add fef
+            <img class="fefi-logo" src="{% static 'images/message-square-svgrepo-com.svg' %}">
+        </a>
+            
+    </p>
+    <ul>
+            {% for fef in fefs %}
+            <div class="pop">
+        <p>
+        {% if profile.photo %} 
+        <img class="prof2" src="{% thumbnail profile.photo  '100x100' %}" width="100" height="100">
+        {% else %}
+        <img class="prof2" src="{% static 'images/Black and White, The Word of the Essence, Philosophy, Typographic and Minimal Phone Wallpaper.jpg' %}" >
+        {% endif %}
+        <a class="username-tag" href="{% url 'fefi:profile' profile.id %}">@{{profile}}</a>
+           
+                {{fef.date_created|date:'M d-Y H:i'}}|    
+        
+            {{fef.text|linebreaks}}
+            <img src="{% thumbnail fef.im 500x500 %}">
+       
+        {% if fef.video %}
+        <video width="640" height="480" controls>
+            <source src="{{fef.video.url}}" >
+        </video>
+        {% else %}
+        
+        {% endif %}
+        {% if fef.audio %}
+        <audio controls>
+            <source src="{{fef.audio.url}}" >
+        </audio>
+        {% else %}
+        {% endif %}
+        <form action="{% url 'fefi:delete_fef' fef.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit">delete fef</button>
+    
+        </form>
+        
+      
+        {{fef.number_of_likes}}
+        like{{fef.number_of_likes|pluralize}} 
+        {% if user not in fef.likes.all %}
+            <a href="{% url 'fefi:fef_like' fef.id %}">
+                <img class="fefi-logo" src="{% static 'images/likeoutline-svgrepo-com.svg' %}">
+            </a>
+            {% else %}
+                <a class="unlike"  href="{% url 'fefi:fef_like' fef.id %}">unlike</a>
+                {% endif %}
+            <a href="{% url 'fefi:reply' fef.id %}">
+                <img class="fefi-logo" src="{% static 'images/reply-svgrepo-com.svg' %}">
+            </a>
+            <div class="reply-count">
+                {{fef.replies.count}}
+            reply{{fef.replies.count|pluralize}}
+            
+            </div>
+        </p>
+            </div>
+            <br/> 
+        {% endfor %}
+     
+    </ul>
+    <br>
+
+</div>
+
+
+
+{% endblock content %}
